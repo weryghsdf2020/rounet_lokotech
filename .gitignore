@@ -125,3 +125,8 @@ data_files/*/**
 data_files/*.*
 !**/.gitkeep
 
+# xlsx
+*.xlsx
+*.csv
+*.rar
+
