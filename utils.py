@@ -46,63 +46,66 @@ def get_orthodromy(llat1, llong1, llat2, llong2):
     return dist
 
 
-# def row_orthodromy(lats: np.array, longs: np.array) -> np.array:
-#     """Finds a matrix of orthodromies of all points in a row
+def row_orthodromy(lats: np.array, longs: np.array) -> np.array:
+    """Finds a matrix of orthodromies of all points in a row
 
-#     You can access the resulting distances by indexes of every point
-#     i.e. distances[1][5] returns a distances (in meters) from first to
-#     fifth point
+    You can access the resulting distances by indexes of every point
+    i.e. distances[1][5] returns a distances (in meters) from first to
+    fifth point
 
-#     Returns
-#     -------
-#     distances : 2-d np.array
-#         matrix of distances from each point to the others
-#     """
+    Returns
+    -------
+    distances : 2-d np.array
+        matrix of distances from each point to the others
+    """
 
-#     lats = lats * np.pi / 180
-#     # 1d array
-#     longs = longs * np.pi / 180
-#     # 1d array
+    lats = lats * np.pi / 180
+    # 1d array
+    longs = longs * np.pi / 180
+    # 1d array
 
-#     # 1d array
-#     cosinuses = np.cos(lats)
-#     # 1d array
-#     sinuses = np.sin(lats)
+    # 1d array
+    cosinuses = np.cos(lats)
+    # 1d array
+    sinuses = np.sin(lats)
 
-#     # 2d array
-#     delta = longs - longs[:, np.newaxis]
-#     # 2d array
-#     cdelta = np.cos(delta)
-#     # 2d array
-#     sdelta = np.sin(delta)
+    # 2d array
+    delta = longs - longs[:, np.newaxis]
+    # 2d array
+    cdelta = np.cos(delta)
+    # 2d array
+    sdelta = np.sin(delta)
 
-#     # 2d array
-#     cos_sin = cosinuses * sinuses[:, np.newaxis]
-#     # 2d array
-#     sin_cos_cdelta = sinuses * cosinuses[:, np.newaxis] * cdelta
-#     # 2d array
-#     cos_sdelta = cosinuses * sdelta
+    # 2d array
+    cos_sin = cosinuses * sinuses[:, np.newaxis]
+    # 2d array
+    sin_cos_cdelta = sinuses * cosinuses[:, np.newaxis] * cdelta
+    # 2d array
+    cos_sdelta = cosinuses * sdelta
 
-#     # 2d array
-#     y = np.sqrt(
-#         np.power(cos_sdelta, 2) +
-#         np.power(cos_sin - sin_cos_cdelta, 2)
-#     )
-#     # 2d array
-#     x = sinuses * sinuses[:, np.newaxis] + \
-#         cosinuses * cosinuses[:, np.newaxis] * cdelta
+    # 2d array
+    y = np.sqrt(
+        np.power(cos_sdelta, 2) +
+        np.power(cos_sin - sin_cos_cdelta, 2)
+    )
+    # 2d array
+    x = sinuses * sinuses[:, np.newaxis] + \
+        cosinuses * cosinuses[:, np.newaxis] * cdelta
 
-#     ad = np.arctan2(y, x)
+    ad = np.arctan2(y, x)
 
-#     rad = 6372795
+    rad = 6372795
 
-#     distances = ad * rad / 1000
+    distances = ad * rad / 1000
+    res_dm = np.zeros((distances.shape[0],
+                       distances.shape[1]), dtype=float)
+    for i in range(distances.shape[0]):
+        for j in range(distances.shape[1]):
+            average_dist = (distances[i][j] + distances[j][i])/2
+            res_dm[i][j] = average_dist
+            res_dm[j][i] = average_dist
 
-#     return distances
-
-
-
-
+    return res_dm
 
 
 def convert_coord(crs_source, crs_target, x, y):

@@ -71,12 +71,12 @@ class RegBaseFlowCalc():
         for x in df_grouped.itertuples():
             matrix[int(x.tr_source_id)][int(x.tr_target_id)] = x.flows
 
-        df_matrix = pd.DataFrame(matrix,
-                                 columns=[str(i)
-                                          for i in range(len(matrix))],
-                                 index=[str(i) for i in range(len(matrix))])
+        self.df_matrix = pd.DataFrame(matrix,
+                                      columns=[str(i)
+                                               for i in range(len(matrix))],
+                                      index=[str(i) for i in range(len(matrix))])
 
-        self.df_matrix = df_matrix
+        # self.df_matrix = df_matrix
         self._make_dict_save_format()
 
     def _make_dict_save_format(self):

@@ -4,6 +4,7 @@ from converters.converter_for_mongo import convert_trs_to_valid_format
 from converters.converter_for_mongo import convert_flows_to_df
 from converters.converter_for_mongo import convert_plos_express_info
 from converters.converter_for_mongo import convert_flow_base_matrix_to_array
+from converters.converter_for_mongo import convert_dm_matrix_to_array
 
 defaults = {
     'db_configs': {
@@ -29,7 +30,8 @@ defaults = {
         'trs': convert_trs_to_valid_format,
         'flows': convert_flows_to_df,
         'plos_express_info': convert_plos_express_info,
-        'flow_base_matrix': convert_flow_base_matrix_to_array
+        'flow_base_matrix': convert_flow_base_matrix_to_array,
+        'dist_matrix': convert_dm_matrix_to_array,
     }
 
 }

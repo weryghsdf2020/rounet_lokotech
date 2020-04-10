@@ -83,6 +83,22 @@ def convert_flow_base_matrix_to_array(flows_list: list):
     return res
 
 
+def convert_dm_matrix_to_array(contain_list: list):
+    """
+        Разворачивает список
+    """
+
+    _arr_contain = []
+    for x in contain_list:
+        its_code = first_or_none(list(x.keys()),
+                                 lambda x: x != '_id' and x != 'version')
+        _arr_contain.append(np.array(x[its_code]))
+
+    res = np.array(_arr_contain)
+
+    return res
+
+
 def convert_plos_express_info(plos_list: list):
     """
         Разворачивает список
