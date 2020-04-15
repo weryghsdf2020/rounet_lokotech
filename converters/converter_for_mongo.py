@@ -71,12 +71,16 @@ def convert_flow_base_matrix_to_array(flows_list: list):
     """
         Разворачивает список
     """
-
+    # ignore_keys = ['_id']
+    # print('convert')
     _arr_contain = []
     for x in flows_list:
-        its_code = first_or_none(list(x.keys()),
-                                 lambda x: x != '_id' and x != 'version')
-        _arr_contain.append(np.array(x[its_code]))
+        try:
+            its_code = first_or_none(list(x.keys()),
+                                     lambda x: x != '_id' and x != 'version'and x != 'transport_type')
+            _arr_contain.append(np.array(x[its_code]))
+        except:
+            continue
 
     res = np.array(_arr_contain)
 
@@ -88,10 +92,12 @@ def convert_dm_matrix_to_array(contain_list: list):
         Разворачивает список
     """
 
+    # print('convert')
+
     _arr_contain = []
     for x in contain_list:
         its_code = first_or_none(list(x.keys()),
-                                 lambda x: x != '_id' and x != 'version')
+                                 lambda x: x != '_id' and x != 'version' and x != 'transport_type')
         _arr_contain.append(np.array(x[its_code]))
 
     res = np.array(_arr_contain)
@@ -110,3 +116,40 @@ def convert_plos_express_info(plos_list: list):
                               }
 
     return plos_express_info_dict
+
+
+def convert_plos_avia_info(plos_list: list):
+    """
+        Разворачивает список
+    """
+
+    info_dict = {str(x['AIRPORT_ID']): {'geometry':
+                                        gload(x['geometry']),
+                                        'name_ru': x['NAME_RU']
+                                        }
+                 for x in plos_list
+                 }
+
+    return info_dict
+
+
+def convert_elasticities_to_dict(el_list: list):
+    df = pd.DataFrame(el_list)
+
+    contain_dict = {}
+
+    soc_types = df.soc_type.drop_duplicates().values
+
+    for soc_type in soc_types:
+        rec_soc = df[df['soc_type'] == soc_type]
+        tr_types = rec_soc.transport_type.drop_duplicates().values
+        soc_dict = {}
+        for tr_type in tr_types:
+            tr_dict = {}
+            rec_tr = rec_soc[rec_soc['transport_type'] == tr_type]
+
+            for x in rec_tr.itertuples():
+                tr_dict[str(x.year)] = x.val
+            soc_dict[tr_type] = tr_dict
+        contain_dict[soc_type] = soc_dict
+    return contain_dict
