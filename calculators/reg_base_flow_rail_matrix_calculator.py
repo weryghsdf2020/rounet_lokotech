@@ -9,7 +9,7 @@ import numpy as np
 # default_tr_name = defaults['default_tr_info']['default_tr_name']
 
 
-class RegBaseFlowCalc():
+class RegBaseRailFlowCalc():
 
     """
         Обеспечивает формирование матрицы корреспонденций 
@@ -70,7 +70,7 @@ class RegBaseFlowCalc():
 
         for x in df_grouped.itertuples():
             matrix[int(x.tr_source_id)][int(x.tr_target_id)] = x.flows
-
+        matrix = self._drop_tr_tr_values(matrix)
         self.df_matrix = pd.DataFrame(matrix,
                                       columns=[str(i)
                                                for i in range(len(matrix))],
@@ -78,6 +78,20 @@ class RegBaseFlowCalc():
 
         # self.df_matrix = df_matrix
         self._make_dict_save_format()
+
+    def _drop_tr_tr_values(self, matrix):
+        new_m = np.zeros((matrix.shape[0],
+                          matrix.shape[1]), dtype=float)
+        for i in range(len(new_m)):
+            for j in range(len(new_m)):
+                if i == j:
+                    val = 0
+                else:
+
+                    val = matrix[i][j]
+
+                new_m[i][j] = val
+        return new_m
 
     def _make_dict_save_format(self):
         self.save_dict = {str(i): list(x)

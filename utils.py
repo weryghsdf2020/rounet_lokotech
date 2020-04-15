@@ -134,3 +134,17 @@ def convert_geometry(crs_source, crs_target, geometry):
     )
 
     return transform(project, geometry)  # apply projection
+
+
+def calc_deviation(target_vector_row,
+                   target_vector_col,
+                   gm):
+    """
+        Считает среднее квадратичное отклонение по строкам и по столбцам
+    """
+    #   среднее квадратичное отклонение по строкам
+    sdr = np.power(target_vector_row - np.sum(gm, axis=1), 2)
+    #   среднее квадратичное отклонение по строкам
+    sdс = np.power(target_vector_col - np.sum(gm, axis=0), 2)
+
+    return np.sum(sdr), np.sum(sdс)
